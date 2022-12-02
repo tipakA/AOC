@@ -95,6 +95,8 @@ function part2(lines: Array<string>) {
 export default function d2(input: string) {
   const lines = input.split('\n').slice(0, -1);
 
+  console.time('d02');
+
   const part1Res = part1(lines);
   const part2Res = part2(lines);
 

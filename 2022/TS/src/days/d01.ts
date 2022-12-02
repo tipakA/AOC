@@ -36,6 +36,8 @@ function part2(data: [number, number, number]) {
 export default function d1(input: string) {
   const lines = input.split('\n').slice(0, -1);
 
+  console.time('d01');
+
   const part1Res = part1(lines);
   const part2Res = part2(part1Res.highest3);
 

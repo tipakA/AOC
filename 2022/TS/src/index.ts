@@ -10,6 +10,7 @@ async function main() {
     const dayInput = await readFile(`./input/${number}.txt`, 'utf8');
 
     console.log(number, await day(dayInput));
+    console.timeEnd(number.toString());
   }
 }
 

@@ -1,5 +1,3 @@
-import { readFile } from 'fs/promises';
-
 // A, X - Rock
 // B, Y - Paper
 // C, Z - Scissors
@@ -94,9 +92,8 @@ function part2(lines: Array<string>) {
   return { score };
 }
 
-export default async function d2() {
-  const file = await readFile('./input/d02.txt', 'utf8');
-  const lines = file.split('\n').slice(0, -1);
+export default function d2(input: string) {
+  const lines = input.split('\n').slice(0, -1);
 
   const part1Res = part1(lines);
   const part2Res = part2(lines);

@@ -1,5 +1,3 @@
-import { readFile } from 'fs/promises';
-
 function part1(lines: Array<string>) {
   let current = 0;
   const highest: [number, number, number] = [ 0, 0, 0 ];
@@ -35,9 +33,8 @@ function part2(data: [number, number, number]) {
   return { sum: data.reduce((a, b) => a + b, 0) };
 }
 
-export default async function d1() {
-  const file = await readFile('./input/d01.txt', 'utf8');
-  const lines = file.split('\n').slice(0, -1);
+export default function d1(input: string) {
+  const lines = input.split('\n').slice(0, -1);
 
   const part1Res = part1(lines);
   const part2Res = part2(part1Res.highest3);

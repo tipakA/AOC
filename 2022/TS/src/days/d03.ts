@@ -26,7 +26,7 @@ function part2(lines: Array<string>) {
   let priority = 0;
 
   for (let i = 2; i < lines.length; i += 3) {
-    const backpacks = [
+    const backpacks: [Array<string>, Array<string>, Array<string>] = [
       lines[i - 2].split(''),
       lines[i - 1].split(''),
       lines[i].split(''),

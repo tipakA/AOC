@@ -8,9 +8,11 @@ async function main() {
     const number = dayFile.slice(0, -3);
     const { default: day } = await import(`./days/${dayFile}`);
     const dayInput = await readFile(`./input/${number}.txt`, 'utf8');
+    const lines = dayInput.split('\n').slice(0, -1);
 
-    console.log(number, await day(dayInput));
-    console.timeEnd(number.toString());
+    console.time(number);
+    console.log(number, await day({ input: dayInput, lines }));
+    console.timeEnd(number);
   }
 }
 

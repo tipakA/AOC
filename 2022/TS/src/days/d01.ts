@@ -33,11 +33,7 @@ function part2(data: [number, number, number]) {
   return { sum: data.reduce((a, b) => a + b, 0) };
 }
 
-export default function d1(input: string) {
-  const lines = input.split('\n').slice(0, -1);
-
-  console.time('d01');
-
+export default function d1({ lines }: { lines: Array<string> }) {
   const part1Res = part1(lines);
   const part2Res = part2(part1Res.highest3);
 

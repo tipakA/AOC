@@ -42,6 +42,27 @@ function part2(lines: Array<string>) {
   return { priority };
 }
 
+function part2Alt(lines: Array<string>) {
+  let priority = 0;
+
+  for (let i = 2; i < lines.length; i += 3) {
+    const backpacks: [Set<string>, Set<string>, Set<string>] = [
+      new Set(lines[i - 2].split('')),
+      new Set(lines[i - 1].split('')),
+      new Set(lines[i].split('')),
+    ];
+
+    for (const item of backpacks[0]) {
+      const inSecond = backpacks[1].has(item);
+      if (!inSecond) continue;
+      const inThird = backpacks[2].has(item);
+      if (inThird) priority += getPriority(item);
+    }
+  }
+
+  return { priority };
+}
+
 export default function d3({ lines }: { lines: Array<string> }) {
   const part1Res = part1(lines);
   const part2Res = part2(lines);

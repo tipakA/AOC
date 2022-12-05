@@ -33,14 +33,13 @@ function parseInstruction(line: string) {
 
 function part1(lines: Array<string>) {
   const { stacks, instructions } = makeStacks(lines);
-  // console.log({ rawStacks, transposed, stacks });
 
-  for (const line of instructions) {
-    const instruction = parseInstruction(line);
+  for (const instruction of instructions) {
+    const { count, src, dst } = parseInstruction(instruction);
 
-    for (let i = 0; i !== instruction.count; i++) {
-      const moved = stacks[instruction.src - 1].pop();
-      stacks[instruction.dst - 1].push(moved!);
+    for (let i = 0; i !== count; i++) {
+      const moved = stacks[src - 1].pop();
+      stacks[dst - 1].push(moved!);
     }
   }
 
@@ -53,12 +52,12 @@ function part2(lines: Array<string>) {
   const { stacks: _stacks, instructions } = makeStacks(lines);
   const stacks = _stacks.map(stack => stack.join(''));
 
-  for (const line of instructions) {
-    const instruction = parseInstruction(line);
+  for (const instruction of instructions) {
+    const { count, src, dst } = parseInstruction(instruction);
 
-    const moved = stacks[instruction.src - 1].slice(instruction.count * -1);
-    stacks[instruction.src - 1] = stacks[instruction.src - 1].slice(0, instruction.count * -1);
-    stacks[instruction.dst - 1] += moved;
+    const moved = stacks[src - 1].slice(count * -1);
+    stacks[src - 1] = stacks[src - 1].slice(0, count * -1);
+    stacks[dst - 1] += moved;
   }
 
   const result = stacks.map(stack => stack.slice(-1)).join('');

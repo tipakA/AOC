@@ -1,39 +1,34 @@
-function part1(input: string) {
-  let packets = [...input.slice(0, 4)];
+function findMarker(input: string, markerSize: number) {
+  if (markerSize > input.length) throw new Error('Marker size cannot be larger than input');
+  let packets = [...input.slice(0, markerSize)];
 
   const earlyCheck = new Set(packets);
-  if (earlyCheck.size === 4) return { packetMarkerEnd: 4 };
+  if (earlyCheck.size === markerSize) return markerSize;
 
-  for (let i = 4; i !== input.length; i++) {
+  for (let i = markerSize; i !== input.length; i++) {
     const char = input[i];
 
-    // packets.shift();
-    // packets.push(char);
     packets = [ ...packets.slice(1), char ];
 
     const check = new Set(packets);
-    if (check.size === 4) return { packetMarkerEnd: i + 1 };
+    if (check.size === markerSize) return i + 1;
   }
 
-  return { packetMarkerEnd: null };
+  return -1;
+}
+
+function part1(input: string) {
+  const marker = findMarker(input, 4);
+  if (marker === -1) throw new Error('Marker of size 4 not found in the input');
+
+  return { packetMarkerEnd: marker };
 }
 
 function part2(input: string) {
-  let packets = [...input.slice(0, 14)];
+  const marker = findMarker(input, 14);
+  if (marker === -1) throw new Error('Marker of size 14 not found in the input');
 
-  const earlyCheck = new Set(packets);
-  if (earlyCheck.size === 14) return { messageMarkerEnd: 14 };
-
-  for (let i = 14; i !== input.length; i++) {
-    const char = input[i];
-
-    packets = [ ...packets.slice(1), char ];
-
-    const check = new Set(packets);
-    if (check.size === 14) return { messageMarkerEnd: i + 1 };
-  }
-
-  return { messageMarkerEnd: null };
+  return { messageMarkerEnd: marker };
 }
 
 export default function d6({ input }: { input: string }) {

@@ -1,30 +1,44 @@
-function part1(lines: string) {
-  let packets = [...lines.slice(0, 4)];
+function part1(input: string) {
+  let packets = [...input.slice(0, 4)];
 
   const earlyCheck = new Set(packets);
-  if (earlyCheck.size === 4) return { markerEnd: 4 };
+  if (earlyCheck.size === 4) return { packetMarkerEnd: 4 };
 
-  for (let i = 4; i !== lines.length; i++) {
-    const char = lines[i];
+  for (let i = 4; i !== input.length; i++) {
+    const char = input[i];
 
     // packets.shift();
     // packets.push(char);
     packets = [ ...packets.slice(1), char ];
 
     const check = new Set(packets);
-    if (check.size === 4) return { markerEnd: i + 1 };
+    if (check.size === 4) return { packetMarkerEnd: i + 1 };
   }
 
-  return { markerEnd: null };
+  return { packetMarkerEnd: null };
 }
 
-function part2(lines: string) {
+function part2(input: string) {
+  let packets = [...input.slice(0, 14)];
 
+  const earlyCheck = new Set(packets);
+  if (earlyCheck.size === 14) return { messageMarkerEnd: 14 };
+
+  for (let i = 14; i !== input.length; i++) {
+    const char = input[i];
+
+    packets = [ ...packets.slice(1), char ];
+
+    const check = new Set(packets);
+    if (check.size === 14) return { messageMarkerEnd: i + 1 };
+  }
+
+  return { messageMarkerEnd: null };
 }
 
 export default function d6({ input }: { input: string }) {
   const part1Res = part1(input);
   const part2Res = part2(input);
 
-  return { p1: part1Res.markerEnd };
+  return { p1: part1Res.packetMarkerEnd, p2: part2Res!.messageMarkerEnd };
 }

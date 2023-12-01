@@ -51,7 +51,7 @@ function part2(lines: Array<string>) {
     //     continue;
     //   }
 
-    const foundIndexes: Array<number> = [];
+    const foundIndexes = new Set<number>();
 
     for (let i = 0; i <= Math.max(line.length - LONGEST_NUMBER, 0); i++) {
       const slice = line.slice(i, i + LONGEST_NUMBER);
@@ -65,11 +65,10 @@ function part2(lines: Array<string>) {
         }
 
         const wordPosition = found + i;
-        if (!foundIndexes.includes(wordPosition)) {
+        if (!foundIndexes.has(wordPosition)) {
           parsedFragments.push({ i: wordPosition, v: idxN++, _s: 'W' });
-          foundIndexes.push(wordPosition);
+          foundIndexes.add(wordPosition);
         }
-
       }
 
       let idxD = 0 + i;
@@ -80,9 +79,9 @@ function part2(lines: Array<string>) {
           continue;
         }
 
-        if (!foundIndexes.includes(idxD)) {
+        if (!foundIndexes.has(idxD)) {
           parsedFragments.push({ i: idxD, v: parsed, _s: 'D' });
-          foundIndexes.push(idxD);
+          foundIndexes.add(idxD);
         }
 
         idxD++;

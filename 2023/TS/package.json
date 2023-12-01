@@ -1,0 +1,31 @@
+{
+  "name": "AOC2023",
+  "version": "0.1.0",
+  "description": "AOC2023",
+  "main": "build/src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "build": "rimraf build && tsc",
+    "rimraf": "rimraf build",
+    "rebuild": "rimraf build && tsc && node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tipakA/AOC"
+  },
+  "author": "tipakA",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tipakA/AOC/issues"
+  },
+  "homepage": "https://github.com/tipakA/AOC/tree/master/2023/TS#readme",
+  "devDependencies": {
+    "@types/node": "^18.19.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.54.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.2"
+  }
+}

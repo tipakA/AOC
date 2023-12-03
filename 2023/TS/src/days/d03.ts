@@ -6,7 +6,7 @@ interface FoundPosition {
 type FoundNumber = FoundPosition & { num: string };
 type FoundSymbol = FoundPosition & { symbol: string };
 
-function part1(lines: Array<string>) {
+function parseNumbersAndSymbols(lines: Array<string>) {
   let idxL = 0;
 
   const foundNumbers: Array<FoundNumber> = [];
@@ -44,15 +44,19 @@ function part1(lines: Array<string>) {
     idxL++;
   }
 
-  const parsed = [];
+  return { foundNumbers, foundSymbols };
+}
 
-  for (const find of foundSymbols) {
+function findNeighboring<T extends FoundPosition>(iterable: Array<T>, numbers: Array<FoundNumber>) {
+  const res = [];
+
+  for (const find of iterable) {
     const positions: Record<number, [number, number]> = {};
     positions[find.idxL - 1] = [ find.idxC - 1, find.idxC + 1 ];
     positions[find.idxL] = [ find.idxC - 1, find.idxC + 1 ];
     positions[find.idxL + 1] = [ find.idxC - 1, find.idxC + 1 ];
 
-    const filtered = foundNumbers.filter(f => {
+    const filtered = numbers.filter(f => {
       const relevantColumns = positions[f.idxL];
       if (!relevantColumns) return false;
 
@@ -63,79 +67,36 @@ function part1(lines: Array<string>) {
       return false;
     });
 
-    for (const fN of filtered) parsed.push(parseInt(fN.num));
+    res.push(filtered);
   }
 
-  return parsed.reduce((a, b) => a + b, 0);
+  return res;
 }
 
-function part2(lines: Array<string>) {
-  let idxL = 0;
+function part1(foundNumbers: Array<FoundNumber>, foundSymbols: Array<FoundSymbol>) {
+  const found = findNeighboring(foundSymbols, foundNumbers);
 
-  const foundNumbers: Array<FoundNumber> = [];
-  const foundSymbols: Array<FoundSymbol> = [];
+  return found.flat().reduce((a, b) => a + parseInt(b.num), 0);
+}
 
-  for (const line of lines) {
-    let idxC = 0;
-    const currNum = {
-      val: '',
-      pos: -1,
-    };
-
-    for (const char of line.split('')) {
-      const matchNum = char.match(/[0-9]/);
-
-      if (matchNum) {
-        currNum.val += char;
-        if (currNum.pos === -1) currNum.pos = idxC;
-      } else {
-        if (currNum.val !== '') {
-          foundNumbers.push({ idxL, idxC: currNum.pos, num: currNum.val });
-          currNum.val = '';
-          currNum.pos = -1;
-        }
-        if (char !== '.') {
-          foundSymbols.push({ idxL, idxC, symbol: char });
-        }
-      }
-
-      idxC++;
-    }
-
-    if (currNum.val !== '') foundNumbers.push({ idxL, idxC: currNum.pos, num: currNum.val });
-
-    idxL++;
-  }
-
+function part2(foundNumbers: Array<FoundNumber>, foundSymbols: Array<FoundSymbol>) {
   let sum = 0;
 
-  for (const gear of foundSymbols.filter(f => f.symbol === '*')) {
-    const positions: Record<number, [number, number]> = {};
-    positions[gear.idxL - 1] = [ gear.idxC - 1, gear.idxC + 1 ];
-    positions[gear.idxL] = [ gear.idxC - 1, gear.idxC + 1 ];
-    positions[gear.idxL + 1] = [ gear.idxC - 1, gear.idxC + 1 ];
+  const foundNeigbors = findNeighboring(foundSymbols.filter(s => s.symbol === '*'), foundNumbers);
 
-    const filtered = foundNumbers.filter(f => {
-      const relevantColumns = positions[f.idxL];
-      if (!relevantColumns) return false;
-
-      if (relevantColumns[0] <= f.idxC + f.num.length - 1 && relevantColumns[1] >= f.idxC) return true;
-
-      // if (f.idxC >= relevantColumns[0] && (f.idxC + f.num.length - 1) <= relevantColumns[1]) return true;
-
-      return false;
-    }).map(n => parseInt(n.num));
-
-    if (filtered.length !== 2) continue;
-    sum += filtered[0] * filtered[1];
+  for (const neighbors of foundNeigbors) {
+    if (neighbors.length !== 2) continue;
+    sum += parseInt(neighbors[0].num) * parseInt(neighbors[1].num);
   }
 
   return sum;
 }
 
 export default function d3({ lines }: { lines: Array<string> }) {
-  const part1Res = part1(lines);
-  const part2Res = part2(lines);
+  const { foundNumbers, foundSymbols } = parseNumbersAndSymbols(lines);
+
+  const part1Res = part1(foundNumbers, foundSymbols);
+  const part2Res = part2(foundNumbers, foundSymbols);
 
   return { p1: part1Res, p2: part2Res };
 }

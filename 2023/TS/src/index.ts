@@ -12,7 +12,7 @@ async function main() {
 
     const { default: day } = await import(`./days/${dayFile}`);
     const dayInput = await readFile(`./input/${number}.txt`, 'utf8');
-    const lines = dayInput.split('\n').slice(0, -1);
+    const lines = dayInput.replaceAll(/\r/g, '').split('\n').slice(0, -1);
 
     console.time(number);
     console.log(number, await day({ input: dayInput, lines }));

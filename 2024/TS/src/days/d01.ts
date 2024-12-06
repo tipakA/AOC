@@ -1,4 +1,4 @@
-function part1(lines: Array<string>) {
+function parseLines(lines: Array<string>) {
   const leftList: Array<number> = [];
   const rightList: Array<number> = [];
 
@@ -7,6 +7,12 @@ function part1(lines: Array<string>) {
     leftList.push(parseInt(left));
     rightList.push(parseInt(right));
   }
+
+  return { leftList, rightList };
+}
+
+function part1(lines: Array<string>) {
+  const { leftList, rightList } = parseLines(lines);
 
   const sortedLeftList = leftList.toSorted((a, b) => a - b);
   const sortedRightList = rightList.toSorted((a, b) => a - b);
@@ -20,13 +26,42 @@ function part1(lines: Array<string>) {
   return totalDistance;
 }
 
-function part2(lines: Array<string>) {
+function part2Filter(lines: Array<string>) {
+  const { leftList, rightList } = parseLines(lines);
 
+  let totalSimilarity = 0;
+
+  for (const left of leftList) {
+    const rightListCount = rightList.filter(right => right === left).length;
+
+    totalSimilarity += left * rightListCount;
+  }
+
+  return totalSimilarity;
 }
 
-export default function d0({ lines }: { lines: Array<string> }) {
-  const part1Res = part1(lines);
-  const part2Res = part2(lines);
+function part2Pre(lines: Array<string>) {
+  const { leftList, rightList } = parseLines(lines);
 
-  return { p1: part1Res };
+  const preFilteredRightList: Record<number, number> = {};
+
+  for (const right of rightList) {
+    preFilteredRightList[right] = (preFilteredRightList[right] ?? 0) + 1;
+  }
+
+  let totalSimilarity = 0;
+
+  for (const left of leftList) {
+    totalSimilarity += left * (preFilteredRightList[left] ?? 0);
+  }
+
+  return totalSimilarity;
+}
+
+export default function d1({ lines }: { lines: Array<string> }) {
+  const part1Res = part1(lines);
+  // const part2Res = part2Filter(lines);
+  const part2Res = part2Pre(lines);
+
+  return { p1: part1Res, p2: part2Res };
 }
